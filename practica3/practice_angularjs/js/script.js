@@ -14,7 +14,7 @@
             },
             {
                 id:2,
-                price:100,
+                price:200,
                 show : false,
                 quantity : 0,
                 image: "images/uyuni.webp",
@@ -23,7 +23,7 @@
             },
             {
                 id:3,
-                price:100,
+                price:300,
                 show : false,
                 quantity : 0,
                 image: "images/villa_tunari.jpg",
@@ -37,7 +37,7 @@
         }
         $scope.scojido = []
         $scope.addAttraction = (id)=>{
-            if(!($scope.contains(id, $scope.scojido))){
+            if(!($scope.contains(id, $scope.scojido)) && $scope.attractions[id-1].quantity>0){
             console.log($scope.scojido)
             let choice = $scope.attractions[id-1]
             // Este obj se crea para no hacer referencia a ningun objecto de la lista attractions
@@ -60,7 +60,7 @@
             console.log($scope.scojido)
             }
             else{
-                alert("El producto ya ha sido escojido")
+                alert("El producto ya ha sido escojido o no se ha agregado un valor valido")
             }
             $scope.cancelAttraction(id)
             
