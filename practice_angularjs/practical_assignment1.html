@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Practical Assignment 1</title>
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="js/script.js"></script>
+
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    </head>
+    <body ng-app="AttractionsModule" ng-controller="AttractionsController" ng-init = "total = 0">
+        <div class="container">
+            <div class="banner text-white">
+                <div class="transparent p-3">
+                    <div class="mt-4">
+                        <h2>Tourist Attractions</h2>
+                        <p>Everything you need to know at your full disposal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="m-5">
+                <h3>Our attractions:</h3>
+                <p>
+                    Have an amazing time when you come to Bolivia and choose among one of these attractions.
+                    To add one of these attractions to your shopping cart just click on "Add to cart"!
+                </p>
+                
+                <div id="attractionsCarousel" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#attractionsCarousel" ng-repeat="attraction in attractions" ng-class="{active: (attraction.id === 1)}" data-slide-to="{{attraction.id - 1}}"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item" ng-class="{active: (attraction.id === 1)}" ng-repeat="attraction in attractions">
+                            <img class="d-block w-100" ng-src="{{ attraction.image }}" />
+                            <div class="container">
+                                <div class="carousel-caption">
+                                    <h5><b>{{ attraction.name }}</b></h5>
+                                    <p>{{ attraction.description }}</p>
+                                    <p>
+                                        <button class="btn btn-primary" ng-show="!attraction.show" ng-click="chooseAttraction(attraction.id)">Choose!</button>
+                                        <div ng-show="attraction.show">
+                                            <p>How many people with travel?</p>
+                                            <input type="number" min="1" ng-model="attraction.quantity" />
+                                            <button class="btn btn-primary" ng-click="addAttraction(attraction.id)">Add to Cart</button>
+                                            <button class="btn btn-primary" ng-click="cancelAttraction(attraction.id)">Cancel</button>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#attractionsCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#attractionsCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="m-5">
+                <h3>Your Shopping Cart:</h3>
+                <p>
+                    Here are your choices!
+                </p>
+                <table class="table table-primary">
+                    <thead>
+                        <tr>
+                            <th>
+
+                            </th>
+                            <th>
+                                Product
+                            </th>
+                            <th>
+                                Price (Bs)
+                            </th>
+                            <td>
+                                Quantity
+                            </td>
+                            <td>
+                                Subtotal
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="choice in productsChosen">
+                            <td>
+                                <img ng-src="{{ choice.image }}" width="200" height="150" />
+                            </td>
+                            <td>
+                                <h5><b>{{ choice.name }}</b></h5>
+                                <p>
+                                    {{ choice.description }}
+                                </p>
+                                <div>
+                                    <button class="btn btn-primary" ng-click="deleteAttraction(choice)">Delete</button>
+                                </div>
+                            </td>
+                            <td>
+                                <b style="font-weight: bold;">
+                                    {{ choice.price }}
+                                </b>
+                            </td>
+                            <td>
+                                <b style="font-weight: bold;">
+                                    {{ choice.quantity }}
+                                </b>
+                            </td>
+                            <td>
+                                <b style="font-weight: bold;">
+                                    {{ choice.subtotal }}
+                                </b>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>
+                                <b>Totals:</b>
+                            </td>
+                            <td>
+                                <span><b>Bs. {{ total }}</b></span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
