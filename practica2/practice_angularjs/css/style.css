@@ -1,0 +1,17 @@
+.banner {
+    background: url(../images/tourism.jpg);
+    background-repeat: round;
+    border-radius: 10px;
+    height: 200px;
+}
+
+.banner-text {
+    opacity: 1;
+}
+
+.banner .transparent {
+    background-color: rgba(0, 0, 10, 0.5);
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+}
