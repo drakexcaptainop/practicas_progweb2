@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> 
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assigment 3</title>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="container" ng-app="app" ng-controller="cont" ng-init="city=null">
+        <form class="form">
+            <div class="mb-3">
+                <label for="txtFirstName" class="form-label">First Name</label>
+                <input type="text" ng-model="data.first_name" id="txtName" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="txtLastName" class="form-label">Last Name</label>
+                <input type="text" ng-model="data.last_name" id="txtName" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="txtBirthDate" class="form-label">Birth Date</label>
+                <input type="date" ng-model="data.birth_date" id="txtName" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="sCity" class="form-label">City</label>
+                <select class="form-control" id="sCity" ng-model="city" ng-change="changeCity()">
+                    <option ng-repeat="i in cities" value="{{i}}">{{i}}</option>
+                </select>
+            </div>
+        </form>
+        <button class="btn btn-danger" ng-click="submit()" style="display: block; margin-left:calc(100%/2 - 150px/2); width: 150px;">Submit</button>
+    </div>
+</body>
+</html>
