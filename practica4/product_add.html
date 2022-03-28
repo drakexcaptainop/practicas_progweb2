@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>New Product</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-file-upload/2.6.1/angular-file-upload.min.js" integrity="sha512-axkIpxPnJn/ltsZKAG8OiY1Ef4bSZ3XiBj5DJOXC4tQG0519hu0kzVClhaVonpXIP6xJjDbLcNc88YiZb9pkEw==" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            // EXERCISE 2: Complete Javascript implementation
+            var app = angular.module('ProductAddModule', ['angularFileUpload']);
+            var controller = app.controller('ProductAddController', ($scope, $http, FileUploader) => {
+                $scope.product = {};
+                $scope.root = '/UNIDAD2/example2'
+
+                $scope.uploader = new FileUploader({
+                    url: 'upload.php'
+                });
+
+                $scope.uploader.onAfterAddingFile = function(fileItem) {
+                    fileItem.upload();
+                }
+
+                $scope.uploader.onCompleteItem = function(fileItem, response, status, headers) {
+                    $scope.product.image = fileItem.file.name;
+                }
+
+                $scope.addProduct = () => {
+                    // POST Call /UNIDAD2/example2/products and then 
+                    // use window.location.href to go back to product_list.html
+                    
+                    $http.post(`${$scope.root}/products`, $scope.product).then((result) => {
+                        window.location.href = 'product_list.html'
+                    })
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container" ng-app="ProductAddModule" ng-controller="ProductAddController" uploader="uploader">
+            <h2>New Product</h2>
+            <form ng-submit="addProduct()">
+                <div class="form-group">
+                    <label for="txtName">Product name</label>
+                    <input type="text" class="form-control" id="txtName" ng-model="product.name" placeholder="Enter product name">
+                  </div>
+                  <div class="form-group">
+                    <label for="txtDescription">Product description</label>
+                    <textarea class="form-control" id="txtDescription" ng-model="product.description" placeholder="Description"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="txtPrice">Product price</label>
+                    <input type="text" class="form-control" id="txtPrice" ng-model="product.price" placeholder="Enter product price">
+                  </div>
+                  <div class="form-group">
+                    <label for="inputImage">Product photo</label>
+                    <input type="file" class="form-control" id="inputImage" placeholder="Add photo" nv-file-select="" uploader="uploader">
+                  </div>
+                  <input type="submit" class="btn btn-primary" value="Add Product" />
+                  <a href="product_list.html" class="btn btn-primary">Return</a>
+            </form>
+        </div>
+    </body>
+</html>

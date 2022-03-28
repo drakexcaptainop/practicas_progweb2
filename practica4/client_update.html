@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>New Client</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <meta charset="utf-8">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-file-upload/2.6.1/angular-file-upload.min.js" integrity="sha512-axkIpxPnJn/ltsZKAG8OiY1Ef4bSZ3XiBj5DJOXC4tQG0519hu0kzVClhaVonpXIP6xJjDbLcNc88YiZb9pkEw==" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous"></script>
+        <script type="text/javascript" defer>
+            // EXERCISE 2: Complete Javascript implementation
+            var app = angular.module("ClientUpdateModule", [])
+            app.controller("ClientUpdateController", ($scope, $http)=>{
+                $scope.client = {
+
+                }
+
+                $scope.val = true 
+                $http.get("./clients.php").then(res => {
+                    let id = window.location.href.split('?')[1].split('=')[1].trim('/')
+                    $scope.client = res.data.filter(a => a.id == id)[0]??{}
+                    if ($scope.client.id){
+                        $scope.comparasion = {
+                        }
+
+                        for (i of Object.getOwnPropertyNames($scope.client)){
+                            $scope.comparasion[i] = $scope.client[i]
+                        }
+                        console.log($scope.client);
+                        console.log($scope.comparasion);
+                    }else{
+                        $scope.val = false
+                        console.log("Error");
+                    }
+                })
+                $scope.updateClient = () => {
+                    for (i of Object.getOwnPropertyNames($scope.client)){
+                            if($scope.comparasion[i] != $scope.client[i]){
+                                $scope.val = false 
+                            }
+                        }
+                    if(!$scope.val){
+                        $http.put("./clients.php", $scope.client).then(res=>{
+                            window.location.href = "./client_list.html"
+                        }).catch(err => {
+                            alert(err)
+                            console.error(err);
+                        })
+                        console.log("Envio");
+                    }else{
+                        alert("MISMOS VALORES");
+                        $scope.val = !$scope.val
+                    }
+                    // window.location.href = "./client_list.html"
+                    console.log(Object.is($scope.comparasion,$scope.client));
+                   
+                }
+            })
+        </script>
+    </head>
+    <body>
+        <div class="container" ng-app="ClientUpdateModule" ng-controller="ClientUpdateController">
+            <h2>Update Client Form</h2>
+            <form>
+                  <div class="form-group">
+                    <label for="txtNit">NIT</label>
+                    <input type="text" class="form-control" id="txtNit" ng-model="client.nit" placeholder="Enter NIT">
+                  </div>
+                  <div class="form-group">
+                    <label for="txtName">Client name</label>
+                    <textarea class="form-control" id="txtName" ng-model="client.name" placeholder="Enter Name"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="txtLastName">Client last name</label>
+                    <input type="text" class="form-control" id="txtLastName" ng-model="client.lastName" placeholder="Enter Last Name">
+                  </div>
+                  <button ng-show="val" ng-click="updateClient()" class="btn btn-primary">Update Client </button>
+                  <a href="client_list.html" class="btn btn-primary">Return</a>
+            </form>
+        </div>
+    </body>
+</html>

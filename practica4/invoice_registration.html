@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Invoice</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-file-upload/2.6.1/angular-file-upload.min.js" integrity="sha512-axkIpxPnJn/ltsZKAG8OiY1Ef4bSZ3XiBj5DJOXC4tQG0519hu0kzVClhaVonpXIP6xJjDbLcNc88YiZb9pkEw==" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            // EXERCISE 3: Complete Javascript implementation
+            var app = angular.module('NewInvoiceModule', []);
+            var controller = app.controller('NewInvoiceController', ($scope, $http) => {
+                $scope.clients = new Array();
+                $scope.products = new Array();
+                $scope.invoice = {
+                    details: new Array()
+                }
+
+                $scope.root = '/UNIDAD2/example2'
+
+                angular.element(document).ready(() => {
+                    /**
+                     * Task:
+                     * Query /clients and /products endpoints to get all data to
+                     * fill out the combo boxes. Use $http.get
+                     */
+
+
+                    // YOUR CODE HERE
+
+                    $http.get(`${$scope.root}/clients`).then((result) => {
+                        $scope.clients = result.data
+                    })
+
+                    $http.get(`${$scope.root}/products`).then((result) => {
+                        $scope.products = result.data
+                    })
+                });
+
+                $scope.addDetail = () => {
+                    let product = _.find($scope.products, {id: $scope.productId});
+
+                    $scope.invoice.details.push({
+                        productId: product.id,
+                        productName: product.name,
+                        productPrice: product.price,
+                        quantity: $scope.productQuantity,
+                        subtotal: product.price * parseInt($scope.productQuantity)
+                    })
+                }
+
+                $scope.postInvoice = () => {
+                    $scope.invoice.clientId = $scope.clientId;
+
+                    /* Task:
+                       Call /invoices endpoint using POST, then display an alert box
+                       with the text: "Invoice registered"
+                    */
+
+                    // YOUR CODE HERE
+                    $http.post(`${$scope.root}/invoices`, $scope.invoice).then((result) => {
+                        alert('Invoice registered')
+                    })
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container" ng-app="NewInvoiceModule" ng-controller="NewInvoiceController" uploader="uploader">
+            <h2>New Invoice</h2>
+            <form ng-submit="postInvoice()">
+                  <div class="form-group">
+                    <label for="cmbClient">Client</label>
+                    <select id="cmbClient" ng-model="clientId">
+                        <option ng-repeat="client in clients" value="{{ client.id }}">{{ client.nit }}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="cmbProduct">Product</label>
+                    <select id="cmbProduct" ng-model="productId">
+                        <option ng-repeat="product in products" value="{{ product.id }}">{{ product.name }}</option>
+                    </select>
+                    <label for="txtQuantity">Quantity</label>
+                    <input id="txtQuantity" ng-model="productQuantity" />
+                    <input type="button" class="btn btn-primary" value="Add product" ng-click="addDetail()" />
+                  </div>
+                  <div class="form-group">
+                    <table class="table table-primary">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Product
+                                </th>
+                                <th>
+                                    Price
+                                </th>
+                                <th>
+                                    Quantity
+                                </th>
+                                <th>
+                                    Subtotal
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="detail in invoice.details">
+                                <td>
+                                    {{ detail.productName }}
+                                </td>
+                                <td>
+                                    {{ detail.productPrice }}
+                                </td>
+                                <td>
+                                    {{ detail.quantity }}
+                                </td>
+                                <td>
+                                    {{ detail.subtotal }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                  </div>
+                  <input type="submit" class="btn btn-primary" value="Post Invoice" />
+            </form>
+        </div>
+    </body>
+</html>
