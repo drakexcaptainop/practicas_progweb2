@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>New Product</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-file-upload/2.6.1/angular-file-upload.min.js" integrity="sha512-axkIpxPnJn/ltsZKAG8OiY1Ef4bSZ3XiBj5DJOXC4tQG0519hu0kzVClhaVonpXIP6xJjDbLcNc88YiZb9pkEw==" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            /**
+             * TO DO:
+             * COMPLETE THE ANGULARJS IMPLEMENTATION
+             * TO ADD NEW PROFESSOR DATA TO THE BACKEND
+             * DATA MUST BE SENT IN JSON FORMAT
+             * 
+             */
+            angular.module("ProfessorAddModule", []).controller("ProfessorAddController",($scope, $http)=>{
+              $scope.professor = {
+                firsName : null,
+                lastName : null,
+                city : null,
+                salary : null
+              }
+              $scope.addProfessor = ()=>{
+                $http.post("./professors_router.php", $scope.professor).catch(a=>{
+                  window.location.href = './professors_view.html'
+                })
+                
+              }  
+            })
+        </script>
+    </head>
+    <body>
+        <div class="container" ng-app="ProfessorAddModule" ng-controller="ProfessorAddController">
+            <h2>New professor</h2>
+            <form>
+                <div class="form-group">
+                    <label for="txtFirstName">First name</label>
+                    <input type="text" class="form-control" id="txtFirstName" ng-model="professor.firstName" placeholder="Enter first name">
+                  </div>
+                  <div class="form-group">
+                    <label for="txtLastName">Last name</label>
+                    <input type="text" class="form-control" id="txtLastName" ng-model="professor.lastName" placeholder="Enter last name">
+                  </div>
+                  <div class="form-group">
+                    <label for="txtCity">City</label>
+                    <input type="text" class="form-control" id="txtCity" ng-model="professor.city" placeholder="Enter first name">
+                  </div>
+                  <div class="form-group">
+                    <label for="txtSalary">Salary</label>
+                    <input class="form-control" id="txtSalary" type="text" ng-model="professor.salary" placeholder="Enter salary">
+                  </div>
+                  <button ng-click="addProfessor()" class="btn btn-danger" type="button">Add Professor</button>
+                  <a href="professors_view.html" class="btn btn-primary">Return</a>
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Student list
+        </title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-file-upload/2.6.1/angular-file-upload.min.js" integrity="sha512-axkIpxPnJn/ltsZKAG8OiY1Ef4bSZ3XiBj5DJOXC4tQG0519hu0kzVClhaVonpXIP6xJjDbLcNc88YiZb9pkEw==" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            // EXERCISE 2: Complete Javascript implementation
+            var app = angular.module('StudentModule', []);
+            var controller = app.controller('StudentController', ($scope, $http) => {
+                $scope.students = new Array();
+
+                angular.element(document).ready(() => {
+                    $scope.getStudents();
+                });
+
+                $scope.getStudents = () => {
+                    $http.get('./students').then((result) => {
+                        $scope.students = result.data;
+                    })
+                }
+                $scope.deleteProfessor = ()=>{
+
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container" ng-app="StudentModule" ng-controller="StudentController">
+            <h2>Student List</h2>
+            <a href="student_add.html" class="btn btn-primary">New Student</a>
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>City</th>
+                        <th>Semester</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="student in students">
+                        <td>
+                            {{ student.id }}
+                        </td>
+                        <td>
+                            {{ student.firstName }}
+                        </td>
+                        <td>
+                            {{ student.lastName }}
+                        </td>
+                        <td>
+                            {{ student.city }}
+                        </td>
+                        <td>
+                            {{ student.semester }}
+                        </td>
+                        <td>
+                            <a href="{{ 'student_update.html?id=' + student.id }}" class="btn btn-primary">Edit</a>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" ng-click = "">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
