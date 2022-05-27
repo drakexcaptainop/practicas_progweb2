@@ -5,9 +5,9 @@
     angular
     .module("EmployeeInsertApp", [])
     .controller("EmployeeInsertController", ($http, $scope)=>{
-        $scope.e = {}
+        $scope.e = {} 
         $scope.addEmployee = function(){
-            $scope.e.birthDate = $scope.e.birthDate.toISOString().split(/[t]/i)[0]
+            $scope.e.birthDate = $scope.e.birthDate.toISOString().split(/[t]/i)[0] 
             $http.post("/ajaxemployee", $scope.e).then(
                 res => {
                     if(res.data.res=="ok") window.location.href = "/employeelist"
@@ -52,8 +52,12 @@
             <input type="date" class="form-control" ng-model="e.birthDate">
         </div>
         <div>
-            <label>city</label>
-            <input type="text" class="form-control" ng-model="e.city">
+            <label>City</label>
+            <select type="text" class="form-control" ng-model="e.city">
+                <option value="Paris">Paris</option>
+                <option value="Sri Lanka">Sri Lanka</option>
+                <option value="Madrid">Madrid</option>
+            </select>
         </div>
         <div class="p-1 bg-warning user-form-banner">
             <h1>

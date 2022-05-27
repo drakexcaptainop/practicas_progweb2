@@ -29,7 +29,6 @@ class EmployeeController extends Controller
                 "email" => $req->email,
                 "password" => Hash::make($req->password)
             ]);
-
             Employee::create([
                 "firstName" => $req->firstName,
                 "lastName" => $req->lastName,
@@ -64,11 +63,10 @@ class EmployeeController extends Controller
             $user->name = $req->name;
             $user->email = $req->email;
             $user->password = $req->password;
-
             $employee->update();
             $user->update();
 
-            DB::commit();
+            DB::commit(); 
         } catch (Exeption $e) {
             DB::rollback();
             $res["res"] = "err";

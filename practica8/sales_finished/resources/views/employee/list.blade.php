@@ -1,8 +1,9 @@
 @extends("layouts.master")
 @section("content")
+
 <script>
     angular.module("EmployeeApp", []).controller("EmployeeController", ($scope, $http)=>{
-        $scope.emp = {}
+        $scope.emp = []
         $scope.get = function(){
             $http.get("/ajaxemployee").then(
                 res => {
@@ -12,6 +13,8 @@
             )
         }
         $scope.get()
+
+
         $scope.deleteEmployee = function(id){
             $http.delete("/ajaxemployee/" + id).then(
                 res=>{
@@ -22,12 +25,16 @@
         }
     })
 </script>
-<div class="container bg-warning p-1" >
-    <h1 >
-        Employee List
-    </h1>
-</div>
+
 <div class="container" ng-app="EmployeeApp" ng-controller="EmployeeController">
+    <div class="container bg-warning p-1" >
+        <h1 >
+            Employee List
+        </h1>
+    </div>
+    <div>
+        <a href="/employeenew" class="btn btn-primary" style="margin: 10px 0;">New Employee</a>
+    </div>
     <table class="table table-dark table-striped">
         <thead>
             <tr>
@@ -75,7 +82,7 @@
                     @{{e.address}}
                 </td>
                 <td>
-                    @{{e.photo}}
+                    <img src="@{{e.photo}}" alt="No Photo" width="100px">
                 </td>
                 <td>
                     <a class="btn btn-warning" href="/employeeedit?id=@{{e.id}}">Edit Employee</a>

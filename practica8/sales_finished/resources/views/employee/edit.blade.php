@@ -5,17 +5,17 @@
     angular
     .module("EmployeeUpdateApp", [])
     .controller("EmployeeUpdateController", ($http, $scope)=>{
-        $scope.e = {}
-        let id = window.location.href.split("=")[1]
+        $scope.e = {} 
+        let id = window.location.href.split("=")[1] 
         $http.get("/ajaxemployee/"+id).then(res=>{
             let data = res.data
             console.log(data)
-            data.employee.birthDate = new Date(data.employee.birthDate)
+            data.employee.birthDate = new Date(data.employee.birthDate) 
             Object.getOwnPropertyNames(data.user).forEach(a => $scope.e[a] = data.user[a])
             Object.getOwnPropertyNames(data.employee).forEach(a => $scope.e[a] = data.employee[a])
         })
         $scope.updateEmployee = function(){
-            $scope.e.birthDate = $scope.e.birthDate.toISOString().split("T")[0] 
+            $scope.e.birthDate = $scope.e.birthDate.toISOString().split("T")[0]
             $http.put("/ajaxemployee", $scope.e).then(
                 res=>{
                     window.location.href = "/employeelist"
@@ -60,8 +60,12 @@
             <input type="date" class="form-control" ng-model="e.birthDate">
         </div>
         <div>
-            <label>city</label>
-            <input type="text" class="form-control" ng-model="e.city">
+            <label>City</label>
+            <select  class="form-control" ng-model="e.city">
+                <option value="Paris">Paris</option>
+                <option value="Sri Lanka">Sri Lanka</option>
+                <option value="Madrid">Madrid</option>
+            </select>
         </div>
         <div class="p-1 bg-warning user-form-banner">
             <h1>
