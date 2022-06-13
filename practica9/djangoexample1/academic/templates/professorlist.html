@@ -1,0 +1,80 @@
+{% extends 'master/main.html' %}
+{% block script %}
+<script defer>
+    var app = angular.module('ProfessorApp', [])
+    app.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    }])
+    app.controller("ProfessorController", ($scope, $http) => {
+        $scope.professors = {}
+        $scope.get = function(){
+            $http.get('/professors/').then(
+                res => {
+                    $scope.professors = res.data
+                    console.log(res.data);
+                }
+            ).catch(err => {
+                alert(err)
+                console.log(err);
+            })
+        }
+        $scope.get()
+        $scope.deleteProfessor = function(id){
+            $http.delete('/professors/' + id + '/').then(res => {
+                $scope.get()
+            })
+        }
+    })
+
+</script>
+
+{% endblock script %}
+
+{% block content %}
+
+<div ng-app="ProfessorApp" ng-controller="ProfessorController">
+    <a href="/professors/new" class="btn btn-info" style="margin-bottom: 20px;">New Professor</a>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th>
+                    First Name
+                </th>
+                <th>
+                    Last Name 
+                </th>
+                <th>
+                    Birth Date
+                </th>
+                <th>
+                    Salary
+                </th>
+                <th>
+                    Options
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat = "p in professors">
+                <td>
+                    {% verbatim  %}{{p.firstName}}{% endverbatim  %}
+                </td>
+                <td>
+                    {% verbatim  %}{{p.lastName}}{% endverbatim  %}
+                </td>
+                <td>
+                    {% verbatim  %}{{p.birthDate}}{% endverbatim  %}
+                </td>
+                <td>
+                    {% verbatim  %}{{p.salary}}{% endverbatim  %}
+                </td>
+                <td colspan="2">
+                    <a href="/professors/{% verbatim  %}{{p.id}}{% endverbatim  %}/edit/" class="btn btn-warning">Edit</a>
+                    <button type="button" class="btn btn-danger" ng-click="deleteProfessor(p.id)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

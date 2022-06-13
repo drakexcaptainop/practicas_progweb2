@@ -1,0 +1,56 @@
+{% extends 'master/main.html' %}
+{% block script %}
+
+<script
+ defer>
+var app = angular.module('ProfessorEditApp', [])
+    app.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    }])
+
+    app.controller("ProfessorEditController", ($scope, $http)=>{
+        $scope.p = {}
+        let split = window.location.href.split('/')
+        let id = split[split.length-3]
+        $http.get(`/professors/${id}/`).then(res => {
+            res.data.birthDate = new Date(res.data.birthDate)
+            $scope.p = res.data
+        })
+
+        $scope.updateProfessor = function () {
+            $scope.p.birthDate = $scope.p.birthDate.toISOString().split('T')[0]
+            $http.put(`/professors/${$scope.p.id}/`, $scope.p).then(res => {
+                window.location.href = '/professors/listview/'
+            })
+        }
+    })
+</script>
+{% endblock script %}
+{% block content %}
+<div ng-app = "ProfessorEditApp" ng-controller = "ProfessorEditController">
+    <form class="form">
+        <div>
+            <label>First Name</label>
+            <input type="text" ng-model="p.firstName" class="form-control">
+        </div>
+        <div>
+            <label>Last Name</label>
+            <input type="text" ng-model="p.lastName" class="form-control">
+        </div>
+        <div>
+            <label>Birth Date</label>
+            <input type="date" ng-model="p.birthDate" class="form-control">
+        </div>
+        <div>
+            <label>Salary</label>
+            <input type="number" ng-model="p.salary" class="form-control">
+        </div>
+    </form>
+    <button class="btn btn-success" style="margin-top: 20px;" ng-click = "updateProfessor()">
+        Update Professor
+    </button>
+</div>
+
+{% endblock content %}
+

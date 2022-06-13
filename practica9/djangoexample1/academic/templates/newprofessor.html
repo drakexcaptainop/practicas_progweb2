@@ -1,0 +1,49 @@
+{% extends 'master/main.html' %}
+{% block script %}
+<script defer>
+    var app = angular.module('ProfessorNewApp', [])
+    app.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    }])
+    app.controller("ProfessorNewController", ($http, $scope)=>{
+        $scope.p = {}
+        $scope.addProfessor = function(){
+            $scope.p.birthDate = $scope.p.birthDate.toISOString().split('T')[0]
+            $http.post('/professors/', $scope.p).then(
+                window.location.href = '/professors/listview/'
+            ).catch(err => {
+                alert(err)
+                console.log(err)
+            })
+        }
+    })
+</script>
+{% endblock script %}
+{% block content %}
+<div ng-app = "ProfessorNewApp" ng-controller = "ProfessorNewController">
+    <form class="form">
+        <div>
+            <label>First Name</label>
+            <input type="text" ng-model="p.firstName" class="form-control">
+        </div>
+        <div>
+            <label>Last Name</label>
+            <input type="text" ng-model="p.lastName" class="form-control">
+        </div>
+        <div>
+            <label>Birth Date</label>
+            <input type="date" ng-model="p.birthDate" class="form-control">
+        </div>
+        <div>
+            <label>Salary</label>
+            <input type="number" ng-model="p.salary" class="form-control">
+        </div>
+    </form>
+    <button class="btn btn-success" style="margin-top: 20px;" ng-click = "addProfessor()">
+        Add Professor
+    </button>
+</div>
+
+
+{% endblock content %}
